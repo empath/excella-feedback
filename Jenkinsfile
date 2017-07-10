@@ -8,8 +8,8 @@ pipeline {
   stages {
     stage('lint') {
       steps {
-        sh '''apt-get update
-apt-get -y install ruby
+        sh '''sudo apt-get update
+sudo apt-get -y install ruby
 gem install bundler
 bundle install
 rubocop'''
