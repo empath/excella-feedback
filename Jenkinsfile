@@ -1,12 +1,18 @@
 pipeline {
-  agent any
+  agent {
+    node {
+      label 'ecs'
+    }
+    
+  }
   stages {
-    stage('Lint') {
+    stage('lint') {
       steps {
-        node(label: 'ruby') {
-          sh 'rubocop'
-        }
-        
+        sh '''apt-get update
+apt-get -y install ruby
+gem install bundler
+bundle install
+rubocop'''
       }
     }
   }
