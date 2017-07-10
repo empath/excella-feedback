@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 gem 'rails', '~> 5.0.1'
-gem 'pg'
+gem 'pg', group: [:development, :production]
 gem 'jquery-rails'
 gem 'puma', '~> 3.0'
 gem 'bootstrap-sass', '~> 3.3.6'
