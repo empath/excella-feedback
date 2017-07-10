@@ -39,6 +39,7 @@ end
 
 group :test do
   gem 'm'
+  gem 'sqlite3'
 end
 
 gem 'mini_racer', platforms: :ruby
