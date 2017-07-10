@@ -8,11 +8,8 @@ pipeline {
   stages {
     stage('Test') {
       steps {
-        sh '''ruby -v
-rbenv global 2.3.1
-ruby -v
+        sh '''rbenv global 2.3.1
 eval "$(rbenv init -)"
-ruby -v
 bundle install
 bundle exec rubocop'''
       }
