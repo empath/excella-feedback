@@ -1,7 +1,7 @@
 pipeline {
   agent {
     node {
-      label 'ruby'
+      label 'rails'
     }
     
   }
@@ -12,7 +12,7 @@ pipeline {
 eval "$(rbenv init -)"
 bundle install
 bundle exec rubocop
-bundle exec bin/rails test '''
+bundle exec rails test '''
       }
     }
   }
