@@ -23,7 +23,8 @@ pipeline {
         
         node(label: 'cloudformation') {
           checkout scm
-          sh '''aws cloudformation validate-template --region us-east-1 --template-body file://cf.yaml
+          sh '''#!/usr/bin/env bash
+aws cloudformation validate-template --region us-east-1 --template-body file://cf.yaml
 
 if [ "$(aws cloudformation describe-stacks --region us-east-1 --query 'Stacks[?StackName==`cicd-rails-app`]')" == '[]' ];
  then aws cloudformation create-stack \
