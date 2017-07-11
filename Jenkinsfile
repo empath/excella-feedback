@@ -22,7 +22,6 @@ pipeline {
         }
         
         node(label: 'cloudformation') {
-          checkout scm
           sh '''#!/usr/bin/env bash
 aws cloudformation validate-template --region us-east-1 --template-body file://cf.yaml
 
