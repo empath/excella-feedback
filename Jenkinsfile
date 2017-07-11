@@ -38,7 +38,7 @@ else
 --template-body file://cf.yaml \
 --role-arn arn:aws:iam::061207487004:role/Rails-Deploy \
 --parameters ParameterKey=MasterUserName,ParameterValue=${dbusername} \
-ParameterKey=MasterPassword,ParameterValue=${dbpassword} \
+ParameterKey=MasterPassword,ParameterValue=${dbpassword} 
 fi
 
 '''
