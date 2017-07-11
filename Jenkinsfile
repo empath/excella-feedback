@@ -22,6 +22,7 @@ pipeline {
         }
         
         node(label: 'cloudformation') {
+          checkout scm
           sh '''aws cloudformation validate-template --template-body file://cf.yaml
 
 if [ "$(aws cloudformation describe-stacks --query 'Stacks[?StackName==`prodexcellajt-vpc`]')" != '[]' ];
