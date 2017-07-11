@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: CF Template for Rails Deployment
+
+Parameters:
+    Environment:
+        Description: Deployment environment for rails app.
+        Type: String
+        Default: Test
+    DbInstanceType:
+        Description: compute and memory capacity class of db instance
+        Type: String
+        Default: db.t1.micro
+    MasterUsername:
+        Description: Username for db
+        Type: String
+    MasterUserPassword:
+        Description: PW for db
+        Type: String
+
+Resources:
+    PostgresDb:
+        Type: AWS::RDS::DBInstance
+        Properties:
+            DBInstanceClass: !Ref DbInstanceType
+            Engine: PostgresSQL
+            VPCSecurityGroups: 
+                - !Ref VPCSecurityGroup
+            Tags:
+                - 
+                    Key: Name
+                    Value: RailsDb
+            MasterUsername: !Ref MasterUsername
+            MasterUserPassword: !Ref MasterUserPassword
+            VPCSecurityGroups:
+                - !GetAtt DBEC2SecurityGroup.GroupId
+
+    DBEC2SecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: DB Access for rails
+            SecurityGroupIngress:
+                - IpProtocol: tcp
+                  FromPort: 3306
+                  ToPort: 3306
+                  CidrIp: 0.0.0.0/0
+
+
