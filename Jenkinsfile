@@ -30,8 +30,8 @@ if [ "$(aws cloudformation describe-stacks --region us-east-1 --query 'Stacks[?S
  --region us-east-1 --stack-name cicd-rails-app \
 --template-body file://cf.yaml   \
 --role-arn arn:aws:iam::061207487004:role/Rails-Deploy \
---parameters ParameterKey=MasterUserName,ParameterValue=${dbusername} \
-ParameterKey=MasterPassword,ParameterValue=${dbpassword} \
+--parameters ParameterKey=MasterUserName,ParameterValue="${dbusername}" \
+ParameterKey=MasterPassword,ParameterValue="${dbpassword}" \
 else
   aws cloudformation update-stack \
 --region us-east-1 --stack-name cicd-rails-app \
