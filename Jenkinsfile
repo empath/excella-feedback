@@ -22,7 +22,7 @@ pipeline {
         }
         
         node(label: 'cloudformation') {
-          cfnUpdate(stack: 'cicd-rails-app', params: '["MasterUsername=${dbusername}", "MasterUserPassword=${dbpassword}"]', file: 'cf.yaml')
+          cfnUpdate(stack: 'cicd-rails-app', params: ["MasterUsername=${dbusername}", "MasterUserPassword=${dbpassword}"], file: 'cf.yaml')
         }
         
       }
