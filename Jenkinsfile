@@ -21,8 +21,17 @@ pipeline {
           
         }
         
-        sh '''echo $dbusername
-echo $dbpassword'''
+        node(label: 'cloudformation') {
+          sh '''aws cloudformation validate-template --template-body file://cf.yaml
+
+if [ "$(aws cloudformation describe-stacks --query 'Stacks[?StackName==`prodexcellajt-vpc`]')" != '[]' ];
+ then aws cloudformation create-stack --stack-name cicd-rails-app --template-body file://cf.yaml \
+  --parameters ParameterKey=MasterUserName,ParameterValue=${dbusername} ParameterKey=MasterPassword,ParameterValue=${dbpassword}
+else
+  aws cloudformation update-stack --stack-name cicd-rails-app --template-body file://cf.yaml --parameters ParameterKey=MasterUserName,ParameterValue=${dbusername} ParameterKey=MasterPassword,ParameterValue=${dbpassword}
+fi'''
+        }
+        
       }
     }
   }
