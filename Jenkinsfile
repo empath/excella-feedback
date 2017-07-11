@@ -25,20 +25,20 @@ pipeline {
           checkout scm
           sh '''aws cloudformation validate-template --region us-east-1 --template-body file://cf.yaml
 
-if [ "$(aws cloudformation describe-stacks --region us-east-1 --query 'Stacks[?StackName==`cicd-rails-app`]')" != '[]' ];
+if [ "$(aws cloudformation describe-stacks --region us-east-1 --query 'Stacks[?StackName==`cicd-rails-app`]')" == '[]' ];
  then aws cloudformation create-stack \
  --region us-east-1 --stack-name cicd-rails-app \
 --template-body file://cf.yaml   \
+--role-arn arn:aws:iam::061207487004:role/Rails-Deploy \
 --parameters ParameterKey=MasterUserName,ParameterValue=${dbusername} \
 ParameterKey=MasterPassword,ParameterValue=${dbpassword} \
---role-arn arn:aws:iam::061207487004:role/Rails-Deploy
 else
   aws cloudformation update-stack \
 --region us-east-1 --stack-name cicd-rails-app \
 --template-body file://cf.yaml \
+--role-arn arn:aws:iam::061207487004:role/Rails-Deploy \
 --parameters ParameterKey=MasterUserName,ParameterValue=${dbusername} \
-ParameterKey=MasterPassword,ParameterValue=${dbpassword}\
---role-arn arn:aws:iam::061207487004:role/Rails-Deploy
+ParameterKey=MasterPassword,ParameterValue=${dbpassword} \
 fi
 
 '''
