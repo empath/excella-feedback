@@ -22,6 +22,7 @@ pipeline {
         }
         
         node(label: 'cloudformation') {
+          checkout scm
           cfnUpdate(stack: 'cicd-rails-app', params: ["MasterUsername=${dbusername}", "MasterUserPassword=${dbpassword}"], file: 'cf.yaml')
         }
         
