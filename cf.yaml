@@ -12,9 +12,11 @@ Parameters:
         Type: String
         Default: db.t1.micro
     MasterUsername:
+        NoEcho: True
         Description: Username for db
         Type: String
     MasterUserPassword:
+        NoEcho: True
         Description: PW for db
         Type: String
 
