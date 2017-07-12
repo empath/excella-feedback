@@ -24,6 +24,7 @@ pipeline {
         node(label: 'ruby') {
           checkout scm
           sh '''#!/usr/bin/env bash
+eval $(rbenv init -)
 gem install cfer
 cfer converge -t cf.rb rails-test MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
 '''
