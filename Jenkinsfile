@@ -21,7 +21,7 @@ pipeline {
 
         }
 
-        node(label: 'ruby') {
+        node(label: 'cloudformation') {
           checkout scm
           sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
