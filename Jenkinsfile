@@ -26,7 +26,7 @@ pipeline {
           sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
 gem install cfer
-cfer converge -t cf.rb rails-test MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
+cfer converge --region us-east-1 -t cf.rb rails-test MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
 '''
         }
 
