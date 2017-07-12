@@ -3,7 +3,7 @@ pipeline {
     node {
       label 'rails'
     }
-    
+
   }
   stages {
     stage('Test') {
@@ -18,15 +18,17 @@ pipeline {
             env['dbusername'] = sh(script: "aws ssm get-parameters --names RailsPg_user --with-decryption --region us-east-1 --query 'Parameters[0].Value' --output text", returnStdout: true).trim()
             env['dbpassword'] = sh(script: "aws ssm get-parameters --names railspg_password --with-decryption --region us-east-1 --query 'Parameters[0].Value' --output text", returnStdout: true).trim()
           }
-          
+
         }
-        
-        node(label: 'cloudformation') {
+
+        node(label: 'ruby') {
           checkout scm
-          awsIdentity()
-          cfnUpdate(stack: 'cicd-rails-app', params: ["MasterUsername=${env['dbusername']}", "MasterUserPassword=${env['dbpassword']}"], file: 'cf.yaml')
+          sh '''#!/usr/bin/env bash
+gem install cfer
+cfer converge -t cf.rb rails-test MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
+'''
         }
-        
+
       }
     }
   }
