@@ -32,7 +32,7 @@ eval "$(rbenv init -)"
 gem install specific_install
 gem specific_install https://github.com/empath/cfer.git
 cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us-east-1 -t cf.rb cicd-rails-test MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
-status=$(cfer describe --region cicd-rails-test | grep Status | awk '{print $2}')
+status=$(cfer describe --region us-east-1 cicd-rails-test | grep Status | awk '{print $2}')
 [ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
 '''
           script {
