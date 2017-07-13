@@ -54,8 +54,8 @@ echo $dbendpointaddress
 echo $dbendpointport
 export RAILS_ENV=test
 rails db:create
-rails db:migrate      # Does nothing (no error output)
-rake db:migrate       # Same result as above
+rails db:migrate
+rake db:migrate       
 '''
       }}
 
