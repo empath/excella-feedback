@@ -19,8 +19,8 @@ resource :DBEC2SecurityGroup, "AWS::EC2::SecurityGroup" do
     {
       CidrIp: '0.0.0.0/0',
       IpProtocol: 'tcp',
-      FromPort: 3306,
-      ToPort: 3306
+      FromPort: 5432,
+      ToPort: 5432
     }
   ]
 end
