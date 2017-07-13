@@ -8,7 +8,10 @@ pipeline {
   stages {
     stage('Lint') {
       steps {
-        sh '''rubocop'''
+        sh '''#!/usr/bin/env bash
+        eval "$(rbenv init -)"
+gem install rubocop
+rubocop'''
       }
     }
     stage('Setup for testing'){
