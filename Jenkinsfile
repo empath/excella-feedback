@@ -82,7 +82,7 @@ cfer delete --region us-east-1 cicd-rails-test
 eval "$(rbenv init -)"
 gem install specific_install
 gem specific_install https://github.com/empath/cfer.git
-cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us-east-1 -t cf.rb cicd-rails-test Environment=production DBInstanceType=db.m4.large MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
+cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us-east-1 -t cf.rb cicd-rails-prod Environment=production DBInstanceType=db.m4.large MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
 status=$(cfer describe --region us-east-1 cicd-rails-prod | grep Status | awk '{print $2}')
 [ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
 '''
