@@ -1,7 +1,7 @@
 pipeline {
   agent {
     node {
-      label 'cloudformation'
+      label 'ruby'
     }
 
   }
@@ -14,13 +14,9 @@ gem install rubocop
 rubocop --fail-level E'''
       }
     }
-    stage('Setup'){
+    stage('Setup for testing'){
       steps {
-        checkout scm
-        sh '''#!/usr/bin/env bash
-eval "$(rbenv init -)"
-gem install specific_install
-gem specific_install https://github.com/empath/cfer.git'''
+
         node(label: 'awscli') {
           script {
             env['dbusername'] = sh(script: "aws ssm get-parameters --names RailsPg_user --with-decryption --region us-east-1 --query 'Parameters[0].Value' --output text", returnStdout: true).trim()
@@ -28,8 +24,13 @@ gem specific_install https://github.com/empath/cfer.git'''
           }
 
         }
+
+        node(label: 'cloudformation') {
+          checkout scm
           sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
+gem install specific_install
+gem specific_install https://github.com/empath/cfer.git
 cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us-east-1 -t cf.rb cicd-rails-test MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
 status=$(cfer describe --region us-east-1 cicd-rails-test | grep Status | awk '{print $2}')
 [ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
@@ -38,6 +39,8 @@ status=$(cfer describe --region us-east-1 cicd-rails-test | grep Status | awk '{
             env['dbendpointaddress'] = sh(script: "eval \"\$(rbenv init -)\"; cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointAddress | awk '{print \$NF}'", returnStdout: true).trim()
             env['dbendpointport'] = sh(script: "eval \"\$(rbenv init -)\"; cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointPort | awk '{print \$NF}'", returnStdout: true).trim()
           }
+        }
+
       }
     }
     stage ('Testing ') {
@@ -58,24 +61,34 @@ rake test
 
     }
   stage ('Tear Down Test, Update Production'){
+    agent {
+      node {
+        label 'cloudformation'
+      }}
     steps {
       parallel(
         tearDownTest: {
+          node(label: 'cloudformation'){
         checkout scm
         sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
+gem install specific_install
+gem specific_install https://github.com/empath/cfer.git
 cfer delete --region us-east-1 cicd-rails-test
 '''
-      },
+      }},
       updateProd: {
+        node(label: 'cloudformation'){
         checkout scm
         sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
+gem install specific_install
+gem specific_install https://github.com/empath/cfer.git
 cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us-east-1 -t cf.rb cicd-rails-prod Environment=production DBInstanceType=db.m4.large MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
 status=$(cfer describe --region us-east-1 cicd-rails-prod | grep Status | awk '{print $2}')
 [ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
 '''
-      })
+      }})
     }
 
   }
