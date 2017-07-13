@@ -3,6 +3,8 @@ default: &default
   encoding: unicode
   password: "<%= ENV['dbpassword'] %>"
   username: <%= ENV['dbusername'] %>
+  hostname: <%= ENV['dbendpointaddress'] %>
+  port: <%= ENV['dbendpointport'] %>
   # pool: 5
   # host: localhost
   # timeout: 5000
