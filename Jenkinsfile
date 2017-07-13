@@ -55,10 +55,40 @@ echo $dbendpointport
 export RAILS_ENV=test
 rails db:create
 rails db:migrate
-rake test  
+rake test
 '''
       }}
 
     }
+  stage ('Tear Down Test, Update Production'){
+    agent {
+      node {
+        label 'cloudformation'
+      }}
+    steps {
+      parallel(
+        tearDownTest: {
+        checkout scm
+        sh '''#!/usr/bin/env bash
+eval "$(rbenv init -)"
+gem install specific_install
+gem specific_install https://github.com/empath/cfer.git
+cfer delete --region us-east-1 cicd-rails-test
+'''
+      }
+      updateProd: {
+        checkout scm
+        sh '''#!/usr/bin/env bash
+eval "$(rbenv init -)"
+gem install specific_install
+gem specific_install https://github.com/empath/cfer.git
+cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us-east-1 -t cf.rb cicd-rails-test Environment=production DBInstanceType=db.m4.large MasterUsername=${dbusername} MasterUserPassword=${dbpassword}
+status=$(cfer describe --region us-east-1 cicd-rails-prod | grep Status | awk '{print $2}')
+[ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
+'''
+      }
+    }
+
+  }
   }
 }
