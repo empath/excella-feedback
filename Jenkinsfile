@@ -10,6 +10,7 @@ pipeline {
       steps {
         sh '''rubocop'''
       }
+    }
     stage('Setup for testing'){
       steps {
 
@@ -43,5 +44,4 @@ bundle exec rails test'''
 
     }
   }
-}
 }
