@@ -36,8 +36,8 @@ status=$(cfer describe --region us-east-1 cicd-rails-test | grep Status | awk '{
 [ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
 '''
           script {
-            env['dbendpointaddress'] = sh(script: "cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointAddress | awk '{print \$NF}'", returnStdout: true).trim()
-            env['dbendpointport'] = sh(script: "cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointPort | awk '{print \$NF}'", returnStdout: true).trim()
+            env['dbendpointaddress'] = sh(script: "eval \"\$(rbenv init -)\"; cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointAddress | awk '{print \$NF}'", returnStdout: true).trim()
+            env['dbendpointport'] = sh(script: "eval \"\$(rbenv init -)\"; cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointPort | awk '{print \$NF}'", returnStdout: true).trim()
           }
         }
 
