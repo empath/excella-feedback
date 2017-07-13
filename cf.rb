@@ -35,3 +35,6 @@ resource :PostgresDb, "AWS::RDS::DBInstance" do
   MasterUserPassword Fn::ref(:MasterUserPassword)
 
 end
+
+output :DbEndpointAddress, Fn::get_att(:PostgresDb, "Endpoint.Address")
+output :DbEndpointPort, Fn::get_att(:PostgresDb, "Endpoint.Port")
