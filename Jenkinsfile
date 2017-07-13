@@ -11,7 +11,7 @@ pipeline {
         sh '''#!/usr/bin/env bash
         eval "$(rbenv init -)"
 gem install rubocop
-rubocop'''
+rubocop --fail-level E'''
       }
     }
     stage('Setup for testing'){
