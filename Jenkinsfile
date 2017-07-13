@@ -36,17 +36,11 @@ status=$(cfer describe cicd-rails-test | grep Status | awk '{print $2}')
 [ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
 '''
           script {
-            env['dbendpointaddress'] = sh(script: "cfer describe cicd-rails-test | grep DbEndpointAddress | awk '{print \$NF}'", returnStdout: true).trim()
-            env['dbendpointport'] = sh(script: "cfer describe cicd-rails-test | grep DbEndpointPort | awk '{print \$NF}'", returnStdout: true).trim()
+            env['dbendpointaddress'] = sh(script: "cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointAddress | awk '{print \$NF}'", returnStdout: true).trim()
+            env['dbendpointport'] = sh(script: "cfer describe --region us-east-1 cicd-rails-test | grep DbEndpointPort | awk '{print \$NF}'", returnStdout: true).trim()
           }
         }
-        node(label: 'awscli') {
-          script {
-            env['dbusername'] = sh(script: "aws ssm get-parameters --names RailsPg_user --with-decryption --region us-east-1 --query 'Parameters[0].Value' --output text", returnStdout: true).trim()
-            env['dbpassword'] = sh(script: "aws ssm get-parameters --names railspg_password --with-decryption --region us-east-1 --query 'Parameters[0].Value' --output text", returnStdout: true).trim()
-          }
 
-        }
       }
     }
     stage ('Testing ') {
