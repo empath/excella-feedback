@@ -43,7 +43,7 @@ cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us
         sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
 bundle install
-bundle exec rails test'''
+bundle exec rake test'''
       }}
 
     }
