@@ -50,6 +50,8 @@ status=$(cfer describe --region us-east-1 cicd-rails-test | grep Status | awk '{
         sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
 bundle install
+echo $dbendpointaddress
+echo $dbendpointport
 bundle exec rake test'''
       }}
 
