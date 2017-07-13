@@ -52,7 +52,11 @@ eval "$(rbenv init -)"
 bundle install
 echo $dbendpointaddress
 echo $dbendpointport
-bundle exec rake test'''
+export RAILS_ENV=test
+rails db:create
+rails db:migrate      # Does nothing (no error output)
+rake db:migrate       # Same result as above
+'''
       }}
 
     }
