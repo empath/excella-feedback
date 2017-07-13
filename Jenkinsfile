@@ -55,7 +55,7 @@ echo $dbendpointport
 export RAILS_ENV=test
 rails db:create
 rails db:migrate
-rake db:migrate       
+rake test  
 '''
       }}
 
