@@ -44,8 +44,11 @@ status=$(cfer describe --region us-east-1 cicd-rails-test | grep Status | awk '{
       }
     }
     stage ('Testing ') {
+      agent {
+        node {
+          label 'rails'
+      }}
       steps {
-      node(label: 'rails') {
         checkout scm
         sh '''#!/usr/bin/env bash
 eval "$(rbenv init -)"
@@ -57,7 +60,12 @@ rails db:create
 rails db:migrate
 rake test
 '''
-      }}
+      }
+      post {
+        always {
+            junit 'test/reports/**/*.xml'
+        }
+    }
 
     }
   stage ('Tear Down Test, Update Production, Build Ami'){
@@ -93,7 +101,7 @@ status=$(cfer describe --region us-east-1 cicd-rails-prod | grep Status | awk '{
         node(label: 'packer'){
         checkout scm
         sh '''#!/usr/bin/env bash
-./packer build packer.json
+        ~/packer build packer.json
 '''
       }}
       )
