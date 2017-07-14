@@ -93,7 +93,7 @@ status=$(cfer describe --region us-east-1 cicd-rails-prod | grep Status | awk '{
         node(label: 'packer'){
         checkout scm
         sh '''#!/usr/bin/env bash
-packer build packer.json
+./packer build packer.json
 '''
       }}
       )
