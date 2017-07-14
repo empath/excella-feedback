@@ -13,13 +13,17 @@
     },
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
-    "ami_name": "Excella Feedback"
+    "ami_name": "Excella Feedback {{isotime | clean_ami_name}}"
   }],
   "provisioners": [{
   "type": "shell",
   "inline": [
-    "sudo apt-get install -y git",
-    "git clone https://github.com/empath/excella-feedback.git",
+    "sudo apt-get update",
+    "sudo apt-get install -y git zlib1g-dev libpq-dev libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt-dev build-essential ruby-dev libgmp3-dev libgmp-dev",
+    "sudo apt-get install -y python python-pip",
+    "pip install awscli",
+    "git clone -b development https://github.com/empath/excella-feedback.git",
+    "sudo gem install bundler",
     "cd excella-feedback",
     "bundle install"
   ]
