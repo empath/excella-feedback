@@ -60,7 +60,7 @@ rake test
       }}
 
     }
-  stage ('Tear Down Test, Update Production', 'Build Ami'){
+  stage ('Tear Down Test, Update Production, Build Ami'){
     agent {
       node {
         label 'cloudformation'
