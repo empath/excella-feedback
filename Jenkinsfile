@@ -60,7 +60,7 @@ rake test
       }}
 
     }
-  stage ('Tear Down Test, Update Production'){
+  stage ('Tear Down Test, Update Production', 'Build Ami'){
     agent {
       node {
         label 'cloudformation'
@@ -88,7 +88,15 @@ cfer converge --role-arn arn:aws:iam::061207487004:role/Rails-Deploy --region us
 status=$(cfer describe --region us-east-1 cicd-rails-prod | grep Status | awk '{print $2}')
 [ "$status" == "CREATE_COMPLETE" ] || [ "$status" == "UPDATE_COMPLETE" ]
 '''
-      }})
+      }},
+      Packer: {
+        node(label: 'packer'){
+        checkout scm
+        sh '''#!/usr/bin/env bash
+packer build packer.json
+'''
+      }}
+      )
     }
 
   }

@@ -15,7 +15,13 @@
     "ssh_username": "ubuntu",
     "ami_name": "Excella Feedback {{isotime | clean_ami_name}}"
   }],
-  "provisioners": [{
+  "provisioners": [
+    {
+  "type": "shell",
+  "inline": [
+    "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+  ]
+}, {
   "type": "shell",
   "inline": [
     "sudo apt-get update",
@@ -27,5 +33,6 @@
     "cd excella-feedback",
     "bundle install"
   ]
-}]
+}],
+  "post-processors": ["compress"]
 }
