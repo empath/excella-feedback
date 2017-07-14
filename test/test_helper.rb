@@ -22,4 +22,4 @@ module ActiveSupport
   end
 end
 
-Minitest::Reporters.use!
+Minitest::Reporters.use! Minitest::Reporters::JUnitReporter.new
